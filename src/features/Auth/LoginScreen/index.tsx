@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   Container,
   Header,
@@ -11,9 +11,20 @@ import {
   Label,
   Title,
 } from 'native-base';
+import {useNavigation} from '@react-navigation/native';
 import {StyleSheet} from 'react-native';
+import {isNicknameValid} from '../utils/validators';
 
 export const LoginScreen = () => {
+  const [nickname, setNickname] = useState('');
+  const navigation = useNavigation();
+
+  const login = () => {
+    if (isNicknameValid(nickname)) {
+      navigation.navigate('Home');
+    }
+  };
+
   return (
     <Container>
       <Header>
@@ -24,10 +35,10 @@ export const LoginScreen = () => {
       <Form style={style.form}>
         <FormItem floatingLabel>
           <Label>Nickname</Label>
-          <Input />
+          <Input onChangeText={text => setNickname(text)} />
         </FormItem>
-        <Button full primary style={style.button}>
-          <Text> Login </Text>
+        <Button full primary onPress={login} style={style.button}>
+          <Text>Login</Text>
         </Button>
       </Form>
     </Container>
