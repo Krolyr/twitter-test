@@ -1,11 +1,31 @@
 import React from 'react';
-import {Text} from 'react-native';
-import {Content} from 'native-base';
+import {SafeAreaView, StyleSheet} from 'react-native';
+import {useRoute} from '@react-navigation/native';
+import {Post} from '../../Feed/components/Post';
+
+interface RouteParams {
+  key: string;
+  name: string;
+  params: {
+    title: string;
+    desc: string;
+  };
+}
 
 export function Detail(): JSX.Element {
+  const {params} = useRoute<RouteParams>();
+
   return (
-    <Content>
-      <Text>Details</Text>
-    </Content>
+    <SafeAreaView style={styles.container}>
+      <Post title={params.title} desc={params.desc} disabled={true} />
+    </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+  },
+});
