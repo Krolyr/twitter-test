@@ -8,10 +8,10 @@ const Stack = createStackNavigator();
 export function RootNavigator() {
   return (
     <Stack.Navigator
-      initialRouteName={'Login'}
+      initialRouteName={'Home'}
       screenOptions={{headerShown: false}}>
       <Stack.Screen name="Login" component={LoginScreen} />
-      <Stack.Screen name={'Home'} component={HomeNavigator} />
+      <Stack.Screen name="Home" component={HomeNavigator} />
     </Stack.Navigator>
   );
 }
