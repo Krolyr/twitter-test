@@ -1,12 +1,22 @@
 import React from 'react';
+import {useNavigation} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Settings} from '../features/Settings/SettingsScreen';
 import {getTabBarIcon} from './tabBarIcon';
 import {FeedNavigator} from './feedNavigator';
+import {useAuth} from '../context/AuthContext';
 
 const Tab = createBottomTabNavigator();
 
 export function HomeNavigator() {
+  const navigation = useNavigation();
+  const [nickname] = useAuth();
+
+  if (!nickname) {
+    navigation.navigate('Login');
+    return null;
+  }
+
   return (
     <Tab.Navigator initialRouteName={'Home'}>
       <Tab.Screen
