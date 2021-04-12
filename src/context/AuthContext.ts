@@ -1,7 +1,13 @@
 import React, {useContext} from 'react';
 
-type Auth = [string, (arg0: string) => void];
+export type User = {
+  id: string;
+  name: string;
+  userName: string;
+};
 
-export const AuthContext = React.createContext<Auth>(['', _arg0 => void 0]);
+type Auth = [User | null, (arg0: User | null) => void];
+
+export const AuthContext = React.createContext<Auth>([null, () => null]);
 
 export const useAuth = () => useContext(AuthContext);

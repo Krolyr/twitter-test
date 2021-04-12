@@ -3,16 +3,18 @@ import {FlatList, SafeAreaView, StyleSheet, Text} from 'react-native';
 import {Post} from './components/Post';
 import {usePosts, Post as PostItem} from './hooks/usePosts';
 import {Spinner} from 'native-base';
+import {useAuth} from '../../context/AuthContext';
 
 export function Feed(): JSX.Element {
-  const {posts, fetchPosts, loading, loadMore} = usePosts();
+  const user = useAuth()[0];
+  const {posts, fetchPosts, loading} = usePosts(user?.id);
 
   useEffect(() => {
     fetchPosts();
   }, [fetchPosts]);
 
   const renderFlatListItem = ({item}: {item: PostItem}) => {
-    return <Post title={item.title} desc={item.desc} />;
+    return <Post title={item.id} desc={item.text} />;
   };
 
   return (
@@ -21,7 +23,7 @@ export function Feed(): JSX.Element {
       <FlatList
         data={posts}
         renderItem={renderFlatListItem}
-        onEndReached={loadMore}
+        onEndReached={fetchPosts}
         style={styles.flatListContainer}
         contentContainerStyle={styles.contentContainerStyle}
         ListFooterComponent={loading ? <Spinner color="blue" /> : null}

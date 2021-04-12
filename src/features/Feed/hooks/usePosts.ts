@@ -2,18 +2,23 @@ import {useState, useCallback} from 'react';
 import {Toast} from 'native-base';
 import TwitterClient from '../../../api/TwitterClient';
 
-export function usePosts() {
-  const limit = 20;
+export function usePosts(userId?: string) {
   const [posts, setPosts] = useState<Post[]>([]);
-  const [offset, setOffset] = useState(0);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [nextToken, setNextToken] = useState<string | undefined>();
 
   const fetchPosts = useCallback(async () => {
     try {
       setLoading(true);
-      const fetchedPosts = await TwitterClient.getPosts(offset, limit);
-      setPosts(posts => [...posts, ...fetchedPosts]);
+      const data = await TwitterClient.getTweets(userId, nextToken);
+      if (data.meta.result_count === 0) {
+        return;
+      }
+      const fetchedPosts = data.posts;
+      const newNextToken: string | undefined = data.meta.next_token;
+      setNextToken(newNextToken);
+      setPosts(currentPosts => [...currentPosts, ...fetchedPosts]);
     } catch (e) {
       Toast.show({
         text: "Couldn't load more posts",
@@ -24,17 +29,12 @@ export function usePosts() {
     } finally {
       setLoading(false);
     }
-  }, [offset]);
+  }, [nextToken]);
 
-  const loadMore = async () => {
-    setOffset(limit + offset);
-  };
-
-  return {posts, loading, error, fetchPosts, loadMore};
+  return {posts, loading, error, fetchPosts};
 }
 
 export interface Post {
   id: string;
-  title: string;
-  desc: string;
+  text: string;
 }

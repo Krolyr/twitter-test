@@ -17,27 +17,34 @@ import {useNavigation} from '@react-navigation/native';
 import {StyleSheet} from 'react-native';
 import {isNicknameValid} from '../utils/validators';
 import {useAuth} from '../../../context/AuthContext';
+import TwitterClient from '../../../api/TwitterClient';
 
 export const LoginScreen = () => {
-  const [nickname, setNickname] = useAuth();
+  const [, setUser] = useAuth();
+  const [userLogin, setLogin] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const navigation = useNavigation();
 
-  const login = () => {
+  const login = async () => {
     setLoading(true);
     setError(false);
-    if (isNicknameValid(nickname)) {
-      navigation.navigate('Home');
+    if (isNicknameValid(userLogin)) {
+      try {
+        const user = await TwitterClient.getUserByNickname(userLogin);
+        setUser(user);
+        navigation.navigate('Home');
+      } catch (e) {
+        Toast.show({
+          text: e.message,
+          position: 'top',
+          duration: 3000,
+        });
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
     }
-    setLoading(false);
-
-    // Toast.show({
-    //   text: "Couldn't load more posts",
-    //   position: 'top',
-    //   duration: 3000,
-    // });
-    // setError(true);
   };
 
   return (
@@ -50,7 +57,7 @@ export const LoginScreen = () => {
       <Form style={style.form}>
         <FormItem error={error} floatingLabel>
           <Label>Nickname</Label>
-          <Input onChangeText={text => setNickname(text)} />
+          <Input onChangeText={text => setLogin(text)} />
         </FormItem>
         <Button
           disabled={loading}
