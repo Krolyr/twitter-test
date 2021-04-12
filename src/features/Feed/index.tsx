@@ -1,16 +1,17 @@
 import React, {useEffect} from 'react';
 import {FlatList, SafeAreaView, StyleSheet, Text} from 'react-native';
 import {Post} from './components/Post';
-import {usePosts, Post as IPost} from './hooks/usePosts';
+import {usePosts, Post as PostItem} from './hooks/usePosts';
+import {Spinner} from 'native-base';
 
 export function Feed(): JSX.Element {
-  const {posts, fetchPosts, loadMore} = usePosts();
+  const {posts, fetchPosts, loading, loadMore} = usePosts();
 
   useEffect(() => {
     fetchPosts();
   }, [fetchPosts]);
 
-  const renderFlatListItem = ({item}: {item: IPost}) => {
+  const renderFlatListItem = ({item}: {item: PostItem}) => {
     return <Post title={item.title} desc={item.desc} />;
   };
 
@@ -23,6 +24,7 @@ export function Feed(): JSX.Element {
         onEndReached={loadMore}
         style={styles.flatListContainer}
         contentContainerStyle={styles.contentContainerStyle}
+        ListFooterComponent={loading ? <Spinner color="blue" /> : null}
         showsVerticalScrollIndicator={false}
         keyExtractor={item => item.id}
         initialNumToRender={20}
