@@ -19,6 +19,10 @@ class TwitterClient {
     const data = await NetworkClient.get(
       `https://api.twitter.com/2/users/by/username/${nickname}`,
     );
+    if (data.data.errors) {
+      const errors = data.data.errors;
+      throw new Error(errors[0].detail);
+    }
     return data.data.data;
   }
 

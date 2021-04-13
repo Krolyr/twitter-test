@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Container,
   Header,
@@ -14,10 +14,14 @@ import {
   Toast,
 } from 'native-base';
 import {useNavigation} from '@react-navigation/native';
-import {StyleSheet} from 'react-native';
+import {InteractionManager, StyleSheet} from 'react-native';
+import SplashScreen from 'react-native-splash-screen';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import {isNicknameValid} from '../utils/validators';
 import {useAuth} from '../../../context/AuthContext';
 import TwitterClient from '../../../api/TwitterClient';
+import {USER_KEY} from '../utils/constants';
 
 export const LoginScreen = () => {
   const [, setUser] = useAuth();
@@ -26,6 +30,30 @@ export const LoginScreen = () => {
   const [error, setError] = useState(false);
   const navigation = useNavigation();
 
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        const rawUser = await AsyncStorage.getItem(USER_KEY);
+        if (rawUser) {
+          const user = JSON.parse(rawUser);
+          setUser(user);
+          navigation.navigate('Home');
+        }
+      } catch (e) {
+        Toast.show({
+          text: e.message,
+          position: 'top',
+          duration: 3000,
+        });
+      } finally {
+        InteractionManager.runAfterInteractions(() => {
+          SplashScreen.hide();
+        });
+      }
+    };
+    getUser();
+  }, []);
+
   const login = async () => {
     setLoading(true);
     setError(false);
@@ -33,8 +61,10 @@ export const LoginScreen = () => {
       try {
         const user = await TwitterClient.getUserByNickname(userLogin);
         setUser(user);
+        AsyncStorage.setItem('user', JSON.stringify(user));
         navigation.navigate('Home');
       } catch (e) {
+        console.log('ERROR');
         Toast.show({
           text: e.message,
           position: 'top',

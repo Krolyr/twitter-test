@@ -2,10 +2,10 @@ import React, {useState} from 'react';
 import {Root} from 'native-base';
 import {NavigationContainer} from '@react-navigation/native';
 import {RootNavigator} from './src/navigation/rootNavigator';
-import {AuthContext} from './src/context/AuthContext';
+import {AuthContext, User} from './src/context/AuthContext';
 
 const App = () => {
-  const [nickname, setNickname] = useState('');
+  const [nickname, setNickname] = useState<User | null>(null);
 
   return (
     <Root>

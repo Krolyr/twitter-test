@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {Dispatch, SetStateAction, useContext} from 'react';
 
 export type User = {
   id: string;
@@ -6,7 +6,7 @@ export type User = {
   userName: string;
 };
 
-type Auth = [User | null, (arg0: User | null) => void];
+type Auth = [User | null, Dispatch<SetStateAction<User | null>>];
 
 export const AuthContext = React.createContext<Auth>([null, () => null]);
 

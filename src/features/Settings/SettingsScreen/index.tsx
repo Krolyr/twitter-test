@@ -2,7 +2,9 @@ import React from 'react';
 import {SafeAreaView, StyleSheet, Text} from 'react-native';
 import {Button} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useAuth} from '../../../context/AuthContext';
+import {USER_KEY} from '../../Auth/utils/constants';
 
 export function Settings(): JSX.Element {
   const [user, setNickname] = useAuth();
@@ -11,6 +13,7 @@ export function Settings(): JSX.Element {
   const logout = () => {
     setNickname(null);
     navigation.navigate('Login');
+    AsyncStorage.removeItem(USER_KEY);
   };
 
   return (
