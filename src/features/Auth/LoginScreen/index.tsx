@@ -61,10 +61,9 @@ export const LoginScreen = () => {
       try {
         const user = await TwitterClient.getUserByNickname(userLogin);
         setUser(user);
-        AsyncStorage.setItem('user', JSON.stringify(user));
+        await AsyncStorage.setItem('user', JSON.stringify(user));
         navigation.navigate('Home');
       } catch (e) {
-        console.log('ERROR');
         Toast.show({
           text: e.message,
           position: 'top',

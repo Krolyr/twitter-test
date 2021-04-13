@@ -10,10 +10,10 @@ export function Settings(): JSX.Element {
   const [user, setNickname] = useAuth();
   const navigation = useNavigation();
 
-  const logout = () => {
+  const logout = async () => {
     setNickname(null);
     navigation.navigate('Login');
-    AsyncStorage.removeItem(USER_KEY);
+    await AsyncStorage.removeItem(USER_KEY);
   };
 
   return (

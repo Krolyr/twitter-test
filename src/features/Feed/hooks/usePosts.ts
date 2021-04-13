@@ -1,4 +1,4 @@
-import {useState, useCallback} from 'react';
+import {useState} from 'react';
 import {Toast} from 'native-base';
 import TwitterClient from '../../../api/TwitterClient';
 
@@ -23,9 +23,7 @@ export function usePosts(userId?: string) {
       if (!newNextToken) {
         setIsEndReached(true);
       }
-      console.log(data.meta);
     } catch (e) {
-      console.log(e);
       Toast.show({
         text: "Couldn't load more posts",
         position: 'top',
