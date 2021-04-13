@@ -7,19 +7,25 @@ export function usePosts(userId?: string) {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [nextToken, setNextToken] = useState<string | undefined>();
+  const [isEndReached, setIsEndReached] = useState(false);
 
-  const fetchPosts = useCallback(async () => {
+  const fetchPosts = async () => {
     try {
       setLoading(true);
-      const data = await TwitterClient.getTweets(userId, nextToken);
-      if (data.meta.result_count === 0) {
+      if (isEndReached) {
         return;
       }
-      const fetchedPosts = data.posts;
+      const data = await TwitterClient.getTweets(userId, nextToken);
+      const fetchedPosts = data.posts ?? [];
       const newNextToken: string | undefined = data.meta.next_token;
       setNextToken(newNextToken);
-      setPosts(currentPosts => [...currentPosts, ...fetchedPosts]);
+      setPosts([...posts, ...fetchedPosts]);
+      if (!newNextToken) {
+        setIsEndReached(true);
+      }
+      console.log(data.meta);
     } catch (e) {
+      console.log(e);
       Toast.show({
         text: "Couldn't load more posts",
         position: 'top',
@@ -29,7 +35,7 @@ export function usePosts(userId?: string) {
     } finally {
       setLoading(false);
     }
-  }, [nextToken]);
+  };
 
   return {posts, loading, error, fetchPosts};
 }

@@ -8,10 +8,11 @@ import {useAuth} from '../../context/AuthContext';
 export function Feed(): JSX.Element {
   const user = useAuth()[0];
   const {posts, fetchPosts, loading} = usePosts(user?.id);
+  let onEndReachedCalledDuringMomentum = true;
 
   useEffect(() => {
     fetchPosts();
-  }, [fetchPosts]);
+  }, []);
 
   const renderFlatListItem = ({item}: {item: PostItem}) => {
     return <Post title={item.id} desc={item.text} />;
@@ -20,17 +21,30 @@ export function Feed(): JSX.Element {
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Feed</Text>
-      <FlatList
-        data={posts}
-        renderItem={renderFlatListItem}
-        onEndReached={fetchPosts}
-        style={styles.flatListContainer}
-        contentContainerStyle={styles.contentContainerStyle}
-        ListFooterComponent={loading ? <Spinner color="blue" /> : null}
-        showsVerticalScrollIndicator={false}
-        keyExtractor={item => item.id}
-        initialNumToRender={20}
-      />
+      {posts.length === 0 ? (
+        <Text style={styles.title}>No posts</Text>
+      ) : (
+        <FlatList
+          data={posts}
+          renderItem={renderFlatListItem}
+          onMomentumScrollBegin={() => {
+            onEndReachedCalledDuringMomentum = true;
+          }}
+          onEndReachedThreshold={0}
+          onEndReached={() => {
+            if (onEndReachedCalledDuringMomentum) {
+              fetchPosts();
+            }
+            onEndReachedCalledDuringMomentum = false;
+          }}
+          style={styles.flatListContainer}
+          contentContainerStyle={styles.contentContainerStyle}
+          ListFooterComponent={loading ? <Spinner color="blue" /> : null}
+          showsVerticalScrollIndicator={false}
+          keyExtractor={item => item.id}
+          initialNumToRender={20}
+        />
+      )}
     </SafeAreaView>
   );
 }
