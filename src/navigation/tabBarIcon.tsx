@@ -1,6 +1,6 @@
-import React, {FC} from 'react';
-import {Text} from 'native-base';
-import {Image, ImageSourcePropType, StyleSheet, View} from 'react-native';
+import React, { FC } from 'react';
+import { Text } from 'native-base';
+import { Image, ImageSourcePropType, StyleSheet, View } from 'react-native';
 
 interface TabBarIconProps {
   focused: boolean;
@@ -11,7 +11,7 @@ interface TabBarIconProps {
 type PossibleRoutes = 'Settings' | 'Feed' | 'Details';
 
 export const TabBarIcon: FC<TabBarIconProps> = React.memo(
-  ({focused, label, image}) => {
+  ({ focused, label, image }) => {
     const focusedStyle = focused ? style.iconFocus : null;
 
     return (

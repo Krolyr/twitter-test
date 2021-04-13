@@ -1,4 +1,4 @@
-import React, {Dispatch, SetStateAction, useContext} from 'react';
+import React, { Dispatch, SetStateAction, useContext } from 'react';
 
 export type User = {
   id: string;

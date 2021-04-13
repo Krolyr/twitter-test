@@ -1,7 +1,6 @@
 import axios from 'axios';
 
-// TODO put real url
-axios.defaults.baseURL = 'fakeurl';
+axios.defaults.baseURL = 'https://api.twitter.com/2/users/';
 
 axios.defaults.headers = {
   Authorization:
@@ -10,6 +9,5 @@ axios.defaults.headers = {
 
 export default {
   get: (url: string, params?: Record<string, unknown>) =>
-    axios.get(url, {params}),
-  post: (url: string, body?: Record<string, unknown>) => axios.post(url, body),
+    axios.get(url, { params }),
 };

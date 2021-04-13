@@ -1,7 +1,7 @@
 import React from 'react';
-import {SafeAreaView, StyleSheet} from 'react-native';
-import {useRoute} from '@react-navigation/native';
-import {Post} from '../../Feed/components/Post';
+import { SafeAreaView, StyleSheet } from 'react-native';
+import { useRoute } from '@react-navigation/native';
+import Post from '../../Feed/components/Post';
 
 interface RouteParams {
   key: string;
@@ -13,7 +13,7 @@ interface RouteParams {
 }
 
 export function Detail(): JSX.Element {
-  const {params} = useRoute<RouteParams>();
+  const { params } = useRoute<RouteParams>();
 
   return (
     <SafeAreaView style={styles.container}>

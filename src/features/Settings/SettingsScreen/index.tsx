@@ -1,10 +1,10 @@
 import React from 'react';
-import {SafeAreaView, StyleSheet, Text} from 'react-native';
-import {Button} from 'native-base';
-import {useNavigation} from '@react-navigation/native';
+import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { Button } from 'native-base';
+import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useAuth} from '../../../context/AuthContext';
-import {USER_KEY} from '../../Auth/utils/constants';
+import { useAuth } from '../../../context/AuthContext';
+import { USER_KEY } from '../../Auth/utils/constants';
 
 export function Settings(): JSX.Element {
   const [user, setNickname] = useAuth();
@@ -19,7 +19,10 @@ export function Settings(): JSX.Element {
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Settings</Text>
-      <Text style={styles.name}>Logged in as: {user?.name}</Text>
+      <View style={styles.userContainer}>
+        <Text style={styles.name}>Logged in as: {user?.name}</Text>
+        <Text style={styles.name}>ID: {user?.id}</Text>
+      </View>
       <Button large full danger onPress={logout} style={styles.buttonContainer}>
         <Text style={styles.buttonText}> Logout </Text>
       </Button>
@@ -48,5 +51,8 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
     fontSize: 20,
+  },
+  userContainer: {
+    alignItems: 'center',
   },
 });

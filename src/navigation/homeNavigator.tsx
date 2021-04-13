@@ -1,10 +1,10 @@
 import React from 'react';
-import {useNavigation} from '@react-navigation/native';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {Settings} from '../features/Settings/SettingsScreen';
-import {getTabBarIcon} from './tabBarIcon';
-import {FeedNavigator} from './feedNavigator';
-import {useAuth} from '../context/AuthContext';
+import { useNavigation } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Settings } from '../features/Settings/SettingsScreen';
+import { getTabBarIcon } from './tabBarIcon';
+import { FeedNavigator } from './feedNavigator';
+import { useAuth } from '../context/AuthContext';
 
 const Tab = createBottomTabNavigator();
 
@@ -24,7 +24,7 @@ export function HomeNavigator() {
         component={FeedNavigator}
         options={{
           tabBarLabel: 'Feed',
-          tabBarIcon: ({focused}) =>
+          tabBarIcon: ({ focused }) =>
             getTabBarIcon(focused, 'Feed', require('../assets/feed.png')),
         }}
       />
@@ -33,7 +33,7 @@ export function HomeNavigator() {
         component={Settings}
         options={{
           tabBarLabel: 'Settings',
-          tabBarIcon: ({focused}) =>
+          tabBarIcon: ({ focused }) =>
             getTabBarIcon(
               focused,
               'Settings',

@@ -1,20 +1,22 @@
-import React, {useEffect} from 'react';
-import {FlatList, SafeAreaView, StyleSheet, Text} from 'react-native';
-import {Spinner} from 'native-base';
-import {Post} from './components/Post';
-import {usePosts, Post as PostItem} from './hooks/usePosts';
-import {useAuth} from '../../context/AuthContext';
+import React, { useEffect } from 'react';
+import { FlatList, SafeAreaView, StyleSheet, Text } from 'react-native';
+import { Spinner } from 'native-base';
+import Post from './components/Post';
+import { usePosts, Post as PostItem } from './hooks/usePosts';
+import { useAuth } from '../../context/AuthContext';
 
 export function Feed(): JSX.Element {
-  const user = useAuth()[0];
-  const {posts, fetchPosts, loading} = usePosts(user?.id);
+  const [user] = useAuth();
+  const { posts, fetchPosts, loading } = usePosts(user?.id);
 
   useEffect(() => {
     fetchPosts();
   }, []);
 
-  const renderFlatListItem = ({item}: {item: PostItem}) => {
-    return <Post title={item.id} desc={item.text} />;
+  const renderFlatListItem = ({ item }: { item: PostItem }) => {
+    return (
+      <Post title={new Date(item.created_at).toDateString()} desc={item.text} />
+    );
   };
 
   return (

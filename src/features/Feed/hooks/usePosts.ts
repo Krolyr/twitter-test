@@ -1,5 +1,5 @@
-import {useState} from 'react';
-import {Toast} from 'native-base';
+import { useState } from 'react';
+import { Toast } from 'native-base';
 import TwitterClient from '../../../api/TwitterClient';
 
 export function usePosts(userId?: string) {
@@ -11,10 +11,10 @@ export function usePosts(userId?: string) {
 
   const fetchPosts = async () => {
     try {
-      setLoading(true);
       if (isEndReached) {
         return;
       }
+      setLoading(true);
       const data = await TwitterClient.getTweets(userId, nextToken);
       const fetchedPosts = data.posts ?? [];
       const newNextToken: string | undefined = data.meta.next_token;
@@ -35,10 +35,11 @@ export function usePosts(userId?: string) {
     }
   };
 
-  return {posts, loading, error, fetchPosts};
+  return { posts, loading, error, fetchPosts };
 }
 
 export interface Post {
   id: string;
   text: string;
+  created_at: string;
 }

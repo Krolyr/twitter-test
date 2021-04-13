@@ -1,25 +1,19 @@
-import React from 'react';
-import {Dimensions, StyleSheet, Text, TouchableOpacity} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import {Card, CardItem, Body, Thumbnail} from 'native-base';
+import React, { memo } from 'react';
+import { Dimensions, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { Card, CardItem, Body } from 'native-base';
 
 interface PostProps {
   title: string;
   desc: string;
   disabled?: boolean;
-  imageUri?: string;
 }
 
-export function Post({
-  title,
-  desc,
-  disabled,
-  imageUri,
-}: PostProps): JSX.Element {
+function Post({ title, desc, disabled }: PostProps): JSX.Element {
   const navigation = useNavigation();
 
   const navigateToPost = () => {
-    navigation.navigate('Detail', {title, desc});
+    navigation.navigate('Detail', { title, desc });
   };
 
   return (
@@ -31,7 +25,6 @@ export function Post({
         <CardItem header bordered>
           <Text>{title}</Text>
         </CardItem>
-        {!!imageUri && <Thumbnail source={{uri: imageUri}} />}
         <CardItem>
           <Body>
             <Text>{desc}</Text>
@@ -51,3 +44,5 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width / 1.3,
   },
 });
+
+export default memo(Post);

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Container,
   Header,
@@ -13,15 +13,14 @@ import {
   Spinner,
   Toast,
 } from 'native-base';
-import {useNavigation} from '@react-navigation/native';
-import {InteractionManager, StyleSheet} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { InteractionManager, StyleSheet } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-import {isNicknameValid} from '../utils/validators';
-import {useAuth} from '../../../context/AuthContext';
+import { isNicknameValid } from '../utils/validators';
+import { useAuth } from '../../../context/AuthContext';
 import TwitterClient from '../../../api/TwitterClient';
-import {USER_KEY} from '../utils/constants';
+import { USER_KEY } from '../utils/constants';
 
 export const LoginScreen = () => {
   const [, setUser] = useAuth();
@@ -55,24 +54,28 @@ export const LoginScreen = () => {
   }, []);
 
   const login = async () => {
+    if (!isNicknameValid(userLogin)) {
+      setError(true);
+      return;
+    }
+
     setLoading(true);
     setError(false);
-    if (isNicknameValid(userLogin)) {
-      try {
-        const user = await TwitterClient.getUserByNickname(userLogin);
-        setUser(user);
-        await AsyncStorage.setItem('user', JSON.stringify(user));
-        navigation.navigate('Home');
-      } catch (e) {
-        Toast.show({
-          text: e.message,
-          position: 'top',
-          duration: 3000,
-        });
-        setError(true);
-      } finally {
-        setLoading(false);
-      }
+
+    try {
+      const user = await TwitterClient.getUserByNickname(userLogin);
+      setUser(user);
+      await AsyncStorage.setItem('user', JSON.stringify(user));
+      navigation.navigate('Home');
+    } catch (e) {
+      Toast.show({
+        text: e.message,
+        position: 'top',
+        duration: 3000,
+      });
+      setError(true);
+    } finally {
+      setLoading(false);
     }
   };
 
